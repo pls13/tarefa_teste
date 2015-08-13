@@ -5,15 +5,13 @@
  */
 package tarefateste;
 
-import model.*;
-import entities.*;
+import entities.Tarefa;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
+import model.TarefaModel;
 
 /**
  *
@@ -207,6 +205,8 @@ public class JInternalFrameTarefaExecucao extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Data criação");
 
+        jTextFieldData.setEditable(false);
+
         jTextFieldStatus.setEditable(false);
         jTextFieldStatus.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -232,12 +232,10 @@ public class JInternalFrameTarefaExecucao extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(45, 45, 45)
-                            .addComponent(jLabel1))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addContainerGap()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
                             .addComponent(jLabel3)))
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -324,7 +322,6 @@ public class JInternalFrameTarefaExecucao extends javax.swing.JInternalFrame {
     private void jTableTarefaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTarefaMouseClicked
         try {
             if (evt.getClickCount() == 2) {
-                //[153,255,153]
                 int indice = this.jTableTarefa.getSelectedRow();
                 String id = this.jTableTarefa.getValueAt(indice, 0).toString();
                 this.tarefaExecucao = this.tarefaModel.find(Integer.parseInt(id));
@@ -339,10 +336,13 @@ public class JInternalFrameTarefaExecucao extends javax.swing.JInternalFrame {
     private void jButtonSetStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSetStatusActionPerformed
         if (this.tarefaExecucao instanceof Tarefa) {
 
-            if (this.tarefaExecucao.getStatus().equals(Tarefa.EXECUTANDO)) {
-                this.tarefaExecucao.setStatus(Tarefa.PARADA);
-            } else if (this.tarefaExecucao.getStatus().equals(Tarefa.PARADA)) {
-                this.tarefaExecucao.setStatus(Tarefa.EXECUTANDO);
+            switch (this.tarefaExecucao.getStatus()) {
+                case Tarefa.EXECUTANDO:
+                    this.tarefaExecucao.setStatus(Tarefa.PARADA);
+                    break;
+                case Tarefa.PARADA:
+                    this.tarefaExecucao.setStatus(Tarefa.EXECUTANDO);
+                    break;
             }
             this.tarefaModel.update(this.tarefaExecucao);
             preencheTabela();

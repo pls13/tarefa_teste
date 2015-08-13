@@ -5,17 +5,11 @@
  */
 package tarefateste;
 
-import entities.*;
-import util.*;
-import java.beans.PropertyVetoException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
+import entities.Usuario;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import model.TarefaModel;
 import model.UsuarioModel;
 
 /**
@@ -35,27 +29,33 @@ public class JFramePrincipal extends javax.swing.JFrame {
      * Creates new form JFrameUsuario
      */
     public JFramePrincipal() {
-        try { 
+        try {
+//            TarefaModel tf = new TarefaModel();
+//    
+//            
+//            tf.getMinhasTarefas();
             initComponents();
-            this.setIconImage(TrayIconApp.createImage("/resources/images/icon.png",""));
+            //login
             JDialogLogin dlg = new JDialogLogin(this, true);
-            if(!(usuarioLogado instanceof Usuario)){
+//            UsuarioModel um = new UsuarioModel();
+//            usuarioLogado = um.find(1);
+            
+            if (!(usuarioLogado instanceof Usuario)) {
                 System.exit(0);
             }
+            
             TrayIconApp trayIcon = new TrayIconApp();
             trayIcon.createAndShowGUI(this);
 
             frameExecucao = new JInternalFrameTarefaExecucao(this);
             this.desktop.add(frameExecucao);
             frameExecucao.setMaximum(true);
-            //ImageIcon img = new ImageIcon("/resources/images/icon.png");
-             
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,6 +78,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Tarefas");
+        setIconImage(TrayIconApp.createImage("/resources/images/icon.png", ""));
         setMinimumSize(new java.awt.Dimension(700, 500));
         setPreferredSize(new java.awt.Dimension(700, 500));
         setResizable(false);
@@ -170,7 +171,6 @@ public class JFramePrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
     public void ocultaTudo() {
         if (frameTarefa instanceof JInternalFrame) {
             frameTarefa.setVisible(false);
@@ -182,98 +182,96 @@ public class JFramePrincipal extends javax.swing.JFrame {
             frameUsuario.setVisible(false);
         }
     }
-    
+
 
     private void jMenuItemTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTarefaActionPerformed
-        exibeCadastroTarefa(); 
+        exibeCadastroTarefa();
     }//GEN-LAST:event_jMenuItemTarefaActionPerformed
-    
-    public void exibeCadastroTarefa() {                                                
+
+    public void exibeCadastroTarefa() {
         try {
             ocultaTudo();
             if (!(frameTarefa instanceof JInternalFrameTarefa)) {
                 frameTarefa = new JInternalFrameTarefa(this);
                 desktop.add(frameTarefa);
-            }else{
+            } else {
                 frameTarefa.atualiza();
             }
             frameTarefa.setVisible(true);
             frameTarefa.setMaximum(true);
         } catch (Exception e) {
-            // ... possibly add some handling for this case
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
-    }                                               
+    }
 
     private void jMenuItemUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUsuarioActionPerformed
         exibeCadastroUsuario();
     }//GEN-LAST:event_jMenuItemUsuarioActionPerformed
-    
-    public  void exibeCadastroUsuario() {                                                 
+
+    public void exibeCadastroUsuario() {
         try {
             ocultaTudo();
             if (!(frameUsuario instanceof JInternalFrameUsuario)) {
                 frameUsuario = new JInternalFrameUsuario(this);
                 desktop.add(frameUsuario);
-            }else{
+            } else {
                 frameUsuario.preencheTabela();
             }
             frameUsuario.setVisible(true);
             frameUsuario.setMaximum(true);
         } catch (Exception e) {
-            // ... possibly add some handling for this case
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
-    }                                                
+    }
 
     private void jMenuMinhasTarefasMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jMenuMinhasTarefasMenuSelected
-        exibeMinhasTarefas(); 
+        exibeMinhasTarefas();
     }//GEN-LAST:event_jMenuMinhasTarefasMenuSelected
-    
-    public void exibeMinhasTarefas() {                                                
-        try{
+
+    public void exibeMinhasTarefas() {
+        try {
             ocultaTudo();
-            if(!(frameExecucao instanceof JInternalFrameTarefaExecucao)) {
+            if (!(frameExecucao instanceof JInternalFrameTarefaExecucao)) {
                 setFrameExecucao(new JInternalFrameTarefaExecucao(this));
                 desktop.add(getFrameExecucao());
-            }else{
+            } else {
                 getFrameExecucao().atualiza();
             }
             getFrameExecucao().setVisible(true);
             getFrameExecucao().setMaximum(true);
         } catch (Exception e) {
-            // ... possibly add some handling for this case
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
-    }                                               
+    }
 
     private void jMenuFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFecharActionPerformed
-                System.exit(0);  
+        System.exit(0);
     }//GEN-LAST:event_jMenuFecharActionPerformed
 
     private void jMenuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuLogoutActionPerformed
         trocarUsuario();
     }
-    
-    public void trocarUsuario() {                                            
-        int idPre = this.usuarioLogado.getId();
-        JDialogLogin jdl = new JDialogLogin(this, true);
-        if(!(usuarioLogado instanceof Usuario)){
-            System.exit(0);
-        }
-        if (this.usuarioLogado.getId() != idPre){
-            this.desktop.removeAll();
-            this.frameTarefa = null;
-            this.frameUsuario = null;
-            this.frameExecucao = new JInternalFrameTarefaExecucao(this);
-            this.desktop.add(frameExecucao);
-           
-            try {
-                this.frameExecucao.setMaximum(true);
-            } catch (PropertyVetoException ex) {
-                Logger.getLogger(JFramePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+
+    public void trocarUsuario() {
+        try {
+            int idPre = this.usuarioLogado.getId();
+            JDialogLogin jdl = new JDialogLogin(this, true);
+            if (!(usuarioLogado instanceof Usuario)) {
+                System.exit(0);
             }
+            if (this.usuarioLogado.getId() != idPre) {
+                this.desktop.removeAll();
+                this.frameTarefa = null;
+                this.frameUsuario = null;
+                this.frameExecucao = new JInternalFrameTarefaExecucao(this);
+                this.desktop.add(frameExecucao);
+                this.frameExecucao.setMaximum(true);
+            }
+            this.setVisible(true);
+            this.setExtendedState(JFrame.NORMAL);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        this.setVisible(true); 
-        this.setExtendedState(JFrame.NORMAL);
-        
     }//GEN-LAST:event_jMenuLogoutActionPerformed
 
     /**

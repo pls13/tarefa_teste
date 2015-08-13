@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package tarefateste;
 
 import entities.Usuario;
@@ -23,12 +19,10 @@ public class JDialogLogin extends javax.swing.JDialog {
     public JDialogLogin(JFramePrincipal parent, boolean modal) {
         super(parent, "Login", true);
         this.framePrincipal = parent;
-        //super(parent, modal);
         initComponents();
         this.jTextFieldNome.setDocument(new DocumentMaxLength(20));
         getRootPane().setDefaultButton(jButtonEntrar);
-        setLocationRelativeTo(null);  // centraliza a tela   
-
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -50,6 +44,8 @@ public class JDialogLogin extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Nome");
+
+        jTextFieldNome.setText("admin");
 
         jButtonEntrar.setText("Entrar");
         jButtonEntrar.addActionListener(new java.awt.event.ActionListener() {
@@ -117,65 +113,23 @@ public class JDialogLogin extends javax.swing.JDialog {
         this.jTextFieldNome.setText(this.jTextFieldNome.getText().trim());
         if (this.jTextFieldNome.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Preencha um nome");
-
         } else {
             Usuario u = this.framePrincipal.usuarioModel.findCriteria("nome", this.jTextFieldNome.getText());
             if (u instanceof Usuario) {
                 this.framePrincipal.usuarioLogado = u;
-                this.framePrincipal.setTitle(this.framePrincipal.TITULO + "Usuário: " + this.framePrincipal.usuarioLogado.getNome());
-                setVisible(false);
-                dispose();
+                this.framePrincipal.setTitle(this.framePrincipal.TITULO + "Usuário: " + u.getNome());
+                this.setVisible(false);
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Usuário não cadastrado");
             }
         }
         this.jTextFieldNome.selectAll();
         this.jTextFieldNome.grabFocus();
-        this.jTextFieldNome.requestFocus();//or inWindow
+        this.jTextFieldNome.requestFocus();
 
     }//GEN-LAST:event_jButtonEntrarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                JDialogLogin dialog = new JDialogLogin(new JFramePrincipal(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;

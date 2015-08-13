@@ -1,9 +1,10 @@
 package model;
 
-import entities.*;
-import java.io.*;
-import java.util.*;
-import org.hibernate.*;
+
+import java.io.Serializable;
+import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 
@@ -11,8 +12,7 @@ import org.hibernate.criterion.Restrictions;
 public abstract class AbstractModel<T> {
 
     private Class<T> entityClass;
-    protected final SessionFactory sessionFactory = HibernateUtil
-            .getSessionFactory();
+    protected final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
     public AbstractModel(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -80,10 +80,10 @@ public abstract class AbstractModel<T> {
 
     public T find(Object primarykey) {
         try {
-            if (!sessionFactory.getCurrentSession().getTransaction().isActive())
-                sessionFactory.getCurrentSession().getTransaction().begin();            
-            return (T) sessionFactory.getCurrentSession().get(entityClass,
-                    (Serializable) primarykey);
+            if (!sessionFactory.getCurrentSession().getTransaction().isActive()){
+                sessionFactory.getCurrentSession().getTransaction().begin();     
+            }
+            return (T) sessionFactory.getCurrentSession().get(entityClass,(Serializable) primarykey);
         } catch (RuntimeException re) {
             return null;
         }
@@ -104,7 +104,8 @@ public abstract class AbstractModel<T> {
                 sessionFactory.getCurrentSession().getTransaction().begin();     
             }
             Criteria criteria = sessionFactory.getCurrentSession().createCriteria(entityClass);
-            return(T) criteria.add(Restrictions.eq(field, value)).uniqueResult();
+            criteria.add(Restrictions.eq(field, value));
+            return(T) criteria.uniqueResult();
             //return (T) sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName()+" where "+where).uniqueResult();
         } catch (RuntimeException re) {
             return null;

@@ -5,12 +5,17 @@
  */
 package tarefateste;
 
-import model.*;
-import entities.*;
+
+import entities.Tarefa;
+import entities.Usuario;
 import java.text.SimpleDateFormat;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
+import model.TarefaModel;
+import model.UsuarioModel;
 import util.CustomCombo;
 import util.DocumentMaxLength;
 
@@ -26,6 +31,7 @@ public class JInternalFrameTarefa extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form JInternalFrameTarefa
+     * @param framePrincipal
      */
     public JInternalFrameTarefa(JFramePrincipal framePrincipal) {
         try { 
@@ -340,14 +346,9 @@ public class JInternalFrameTarefa extends javax.swing.JInternalFrame {
                     tarefa.setEsforcoEstimado(cce.getKey());
                     tarefa.setDescricao(this.jTextAreaDescricao.getText());
                     this.tarefaModel.update(tarefa);
-                    resetCadastro();
                 }
                 preencheTabela();
-
-                this.jTextFieldTitulo.setText("");
-                this.jComboBoxUsuario.setSelectedIndex(0);
-                this.jComboBoxEsforco.setSelectedIndex(0);
-                this.jTextAreaDescricao.setText("");
+                resetCadastro();
             }
 
         } catch (Exception e) {

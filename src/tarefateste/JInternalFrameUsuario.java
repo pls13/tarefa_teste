@@ -40,7 +40,7 @@ public class JInternalFrameUsuario extends javax.swing.JInternalFrame {
 //        repaint();
     }
 
-    public void preencheTabela(){
+    public final void preencheTabela(){
         //DefaultTableModel dtm = new DefaultTableModel();
         DefaultTableModel dtm = new DefaultTableModel() {
             @Override
